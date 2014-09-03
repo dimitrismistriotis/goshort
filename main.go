@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/dimitrismistriotis/goshort/server"
 	"github.com/op/go-logging"
 	"os"
@@ -10,11 +9,12 @@ import (
 var log = logging.MustGetLogger("short_server")
 
 func main() {
-	var format = logging.MustStringFormatter("%{level} %{message}")
+	var log = logging.MustGetLogger("goshort")
+	var format = logging.MustStringFormatter("%{color} %{level}%{id:03x}%{color:reset} %{message}")
 	logging.SetFormatter(format)
 
-	server.Serve()
-	log.Info("Starting from main")
+	log.Debug("Starting from main")
+	server.Serve(log)
 
 	os.Exit(0)
 }
