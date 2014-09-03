@@ -9,7 +9,13 @@ It seems that everybody's favourite golang learning exercise is to write a URL s
 
 ## Build
 
-TODO
+Run
+```bash
+go get .
+```
+in order to retrieve all external dependencies, which should be:
+
+* Gorilla Mux
 
 ## Deploy
 
