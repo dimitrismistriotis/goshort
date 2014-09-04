@@ -2,15 +2,13 @@ package server
 
 import (
 	"code.google.com/p/gorilla/mux"
+	"fmt"
 	"github.com/op/go-logging"
 	"net/http"
 )
 
-// TODO: Add host to signature
-// TODO: Add port to signature
-func Serve(log *logging.Logger) {
-	// TODO: Log insteas of fmt
-	log.Debug("Starting server")
+func Serve(log *logging.Logger, port string) {
+	log.Debug(fmt.Sprintf("Starting server on port %s", port))
 
 	r := mux.NewRouter()
 
@@ -19,8 +17,7 @@ func Serve(log *logging.Logger) {
 	})
 
 	server := &http.Server{
-		// TODO: Format host and port
-		Addr:    "0.0.0.0:8080",
+		Addr:    fmt.Sprintf(":%s", port),
 		Handler: r,
 	}
 
