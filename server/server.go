@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/op/go-logging"
 	"net/http"
+	"os"
 )
 
 func Serve(log *logging.Logger, port string) {
@@ -19,6 +20,14 @@ func Serve(log *logging.Logger, port string) {
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", port),
 		Handler: r,
+	}
+
+	_, err := redis_instance(log)
+
+	if err != nil {
+		log.Critical("Cannot access Redis server")
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(2)
 	}
 
 	server.ListenAndServe()

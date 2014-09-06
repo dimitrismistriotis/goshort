@@ -16,6 +16,7 @@ go get .
 in order to retrieve all external dependencies, which should be:
 
 * Gorilla Mux
+* godis - a Redis client for Go
 
 ## Deploy
 
