@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/op/go-logging"
 	godis "github.com/simonz05/godis/redis"
 	"net/url"
 	"os"
@@ -9,7 +8,7 @@ import (
 )
 
 // Gets redis instance from configuration parameters or environment's REDISTOGO_URL.
-func redis_instance(log *logging.Logger) (redis *godis.Client, err error) {
+func redis_instance() (redis *godis.Client, err error) {
 	var host, password string
 
 	if os.Getenv("REDISTOGO_URL") != "" {
@@ -17,7 +16,6 @@ func redis_instance(log *logging.Logger) (redis *godis.Client, err error) {
 	} else {
 		host = "tcp:localhost:6379"
 		password = ""
-		//log.Debug("Redis server setup from configuration. Host: %s Password: %s", host, password)
 	}
 
 	db := 0
