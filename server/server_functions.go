@@ -25,15 +25,23 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	//
 	// TODO: Check if unshortedUrl is valid.
 	//
-	log.Info("Storing url: %s with host %s", string(unshortedUrl), host)
 
 	//
 	// TODO: Check if it already exists
 	//
 
-	// TODO: Get NEXT_KEY_ID
-	// TODO: Inesert unshorten into NEXT_KEY_ID
-	// TODO: increase NEXT_KEY_ID
+	var redis_next_key, _ = redis.Get(NEXT_KEY_ID)
+	var next_key int64
+	if redis_next_key == nil {
+		next_key = 1
+		redis.Set(NEXT_KEY_ID, 1)
+	} else {
+		next_key = redis_next_key.Int64()
+	}
+	redis.Incr(NEXT_KEY_ID)
+
+	log.Info("Storing url: %s with host %s on key %s", string(unshortedUrl), host, next_key)
+
 	// TODO: Return id to hex
 	// TODO: Create a data structure, populate that and return it as JSON
 
