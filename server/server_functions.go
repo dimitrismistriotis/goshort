@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/op/go-logging"
 	godis "github.com/simonz05/godis/redis"
@@ -13,15 +14,28 @@ const (
 	URL_PREFIX  = "URL_"
 )
 
+type GoShortResponse struct {
+	Hostname string
+	Route    string
+	FullUrl  string
+	Message  string
+	Error    string
+}
+
 //
 // Example: curl http://localhost:8080/short/ --data-urlencode "u=http://www.mistriotis.com" -v
 // TODO: Put on readme
 //
-func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis *godis.Client) {
+func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis *godis.Client, port string) {
 	log.Debug("Call to shortUrl")
+
 	host := "localhost"
 	if os.Getenv("HOSTNAME") != "" {
 		host = os.Getenv("HOSTNAME")
+	}
+
+	if port != "" || port != "80" {
+		host += ":" + port
 	}
 
 	unshortedUrl := r.FormValue("u")
@@ -31,7 +45,15 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	//
 
 	//
-	// TODO: Check if it already exists
+	// TODO: If not return an erroneous JSON response
+	//
+
+	//
+	// TODO: Check if it already exists.
+	//
+
+	//
+	// TODO: If it exists return it in a JSON response.
 	//
 
 	var redis_next_key, _ = redis.Get(NEXT_KEY_ID)
@@ -45,13 +67,18 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	redis.Incr(NEXT_KEY_ID)
 
 	log.Info("Storing url: %s with host %s on key %s", string(unshortedUrl), host, next_key)
-	log.Info("Key: %s to hex %s", next_key, fmt.Sprintf("%x", next_key))
+	log.Debug("Key: %d to hex %s", next_key, fmt.Sprintf("%x", next_key))
 
 	redis.Set(URL_PREFIX+fmt.Sprintf("%d", next_key), unshortedUrl)
 
-	//
-	// TODO: Create a data structure, populate that and return it as JSON
-	//
+	response := GoShortResponse{
+		Hostname:   host,
+		Route:      "/" + fmt.Sprintf("%x", next_key),
+		ShortedUrl: host + "/" + fmt.Sprintf("%x", next_key),
+		Message:    "Url: " + unshortedUrl + " shorted to " + host + "/" + fmt.Sprintf("%x", next_key),
+		Error:      "",
+	}
 
-	w.Write([]byte("SHORT:" + unshortedUrl + " on " + host + " with id " + fmt.Sprintf("%x", next_key) + "\n"))
+	var res, _ = json.Marshal(response)
+	w.Write(res)
 }
