@@ -8,7 +8,10 @@ import (
 	"os"
 )
 
-const NEXT_KEY_ID = "next_key_id"
+const (
+	NEXT_KEY_ID = "next_key_id"
+	URL_PREFIX  = "URL_"
+)
 
 //
 // Example: curl http://localhost:8080/short/ --data-urlencode "u=http://www.mistriotis.com" -v
@@ -44,9 +47,7 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	log.Info("Storing url: %s with host %s on key %s", string(unshortedUrl), host, next_key)
 	log.Info("Key: %s to hex %s", next_key, fmt.Sprintf("%x", next_key))
 
-	//
-	// TODO: Store URL in redis key store.
-	//
+	redis.Set(URL_PREFIX+fmt.Sprintf("%d", next_key), unshortedUrl)
 
 	//
 	// TODO: Create a data structure, populate that and return it as JSON
