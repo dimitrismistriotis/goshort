@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/op/go-logging"
 	godis "github.com/simonz05/godis/redis"
 	"net/http"
@@ -41,9 +42,15 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	redis.Incr(NEXT_KEY_ID)
 
 	log.Info("Storing url: %s with host %s on key %s", string(unshortedUrl), host, next_key)
+	log.Info("Key: %s to hex %s", next_key, fmt.Sprintf("%x", next_key))
 
-	// TODO: Return id to hex
+	//
+	// TODO: Store URL in redis key store.
+	//
+
+	//
 	// TODO: Create a data structure, populate that and return it as JSON
+	//
 
-	w.Write([]byte("SHORT:" + unshortedUrl + " on " + host))
+	w.Write([]byte("SHORT:" + unshortedUrl + " on " + host + " with id " + fmt.Sprintf("%x", next_key) + "\n"))
 }
