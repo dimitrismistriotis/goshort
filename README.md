@@ -7,6 +7,14 @@ It seems that everybody's favourite golang learning exercise is to write a URL s
 * Configurable to shorten ULRs from specific sites.
 * Attempts to retrieve configuration values from environment using heroku's conventions and then from a configuration file.
 
+## Usage
+
+**Shorting a URL**:
+
+```bash
+curl http://localhost:8080/short/ --data-urlencode "u=http://www.mistriotis.com" -v
+```
+
 ## Build
 
 Run
@@ -18,6 +26,10 @@ in order to retrieve all external dependencies, which should be:
 * Gorilla Mux
 * godis - a Redis client for Go
 
-## Deploy
+## Configuratio and Deployment
 
 TODO
+
+Environment variables:
+
+* HOSTNAME: Hostname from which the service should return responses.

@@ -24,7 +24,6 @@ type GoShortResponse struct {
 
 //
 // Example: curl http://localhost:8080/short/ --data-urlencode "u=http://www.mistriotis.com" -v
-// TODO: Put on readme
 //
 func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis *godis.Client, port string) {
 	log.Debug("Call to shortUrl")
@@ -45,7 +44,7 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	//
 
 	//
-	// TODO: If not return an erroneous JSON response
+	// TODO: If not valid return an erroneous JSON response.
 	//
 
 	//
@@ -53,7 +52,7 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	//
 
 	//
-	// TODO: If it exists return it in a JSON response.
+	// TODO: If it already exists return the existent one in a JSON response.
 	//
 
 	var redis_next_key, _ = redis.Get(NEXT_KEY_ID)

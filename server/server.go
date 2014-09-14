@@ -29,6 +29,7 @@ func Serve(log *logging.Logger, port string) {
 	// Unsure about this pattern, have also seen the same with having log and
 	// redis in package variables.
 	r.HandleFunc("/short/{url:(.*$)}", func(w http.ResponseWriter, r *http.Request) {
+		// TODO: When on heroku/production port should not ptovided...
 		shortUrl(w, r, log, redis, port)
 	})
 
