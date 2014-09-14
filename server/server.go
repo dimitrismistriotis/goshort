@@ -15,7 +15,7 @@ func Serve(log *logging.Logger, port string) {
 
 	if err != nil {
 		log.Critical("Cannot access Redis server")
-		fmt.Fprintln(os.Stderr, err)
+		log.Critical(fmt.Sprintf("%s", err))
 		os.Exit(2)
 	}
 
