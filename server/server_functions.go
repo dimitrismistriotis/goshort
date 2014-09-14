@@ -71,11 +71,11 @@ func shortUrl(w http.ResponseWriter, r *http.Request, log *logging.Logger, redis
 	redis.Set(URL_PREFIX+fmt.Sprintf("%d", next_key), unshortedUrl)
 
 	response := GoShortResponse{
-		Hostname:   host,
-		Route:      "/" + fmt.Sprintf("%x", next_key),
-		ShortedUrl: host + "/" + fmt.Sprintf("%x", next_key),
-		Message:    "Url: " + unshortedUrl + " shorted to " + host + "/" + fmt.Sprintf("%x", next_key),
-		Error:      "",
+		Hostname: host,
+		Route:    "/" + fmt.Sprintf("%x", next_key),
+		FullUrl:  host + "/" + fmt.Sprintf("%x", next_key),
+		Message:  "Url: " + unshortedUrl + " shorted to " + host + "/" + fmt.Sprintf("%x", next_key),
+		Error:    "",
 	}
 
 	var res, _ = json.Marshal(response)
