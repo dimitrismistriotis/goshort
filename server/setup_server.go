@@ -1,43 +1,26 @@
 package server
 
 import (
-	godis "github.com/simonz05/godis/redis"
-	"net/url"
+	redis "github.com/garyburd/redigo/redis"
+	redisurl "github.com/soveran/redisurl"
 	"os"
 	"time"
 )
 
 // Gets redis instance from configuration parameters or environment's REDISTOGO_URL.
-func redis_instance() (redis *godis.Client, err error) {
-	var host, password string
-
+func redis_instance() (redis_con redis.Conn, err error) {
 	if os.Getenv("REDISTOGO_URL") != "" {
-		host, password = parseRedistogoUrl()
+		redis_con, err = redisurl.ConnectToURL(os.Getenv("REDISTOGO_URL"))
 	} else {
-		host = "tcp:localhost:6379"
-		password = ""
+		redis_con, err = redis.Dial("tcp", ":6379")
 	}
 
-	db := 0
-
-	redis = godis.New(host, db, password)
+	if err != nil {
+		return
+	}
 
 	// Try to set a "dummy" value, panic if redis is not accessible.
-	err = redis.Set("INIT", time.Now().UTC())
+	err = redis_con.Send("Set", "INIT", time.Now().UTC())
 
 	return
-}
-
-// Great artists steal:
-// https://gist.github.com/TheDudeWithTheThing/6468746
-//
-func parseRedistogoUrl() (string, string) {
-	redisUrl := os.Getenv("REDISTOGO_URL")
-	redisInfo, _ := url.Parse(redisUrl)
-	server := redisInfo.Host
-	password := ""
-	if redisInfo.User != nil {
-		password, _ = redisInfo.User.Password()
-	}
-	return server, password
 }
