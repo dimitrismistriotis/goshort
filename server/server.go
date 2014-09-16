@@ -13,13 +13,13 @@ func Serve(log *logging.Logger, port string) {
 
 	redis, err := redis_instance()
 
-	redis.Send("Set", "SOMETHING", "ELSE")
-
 	if err != nil {
 		log.Critical("Cannot access Redis server")
 		log.Critical(fmt.Sprintf("%s", err))
 		os.Exit(2)
 	}
+
+	redis.Send("SET", "SOMETHING", "ELSE")
 
 	r := mux.NewRouter()
 

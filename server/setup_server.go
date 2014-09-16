@@ -20,7 +20,7 @@ func redis_instance() (redis_con redis.Conn, err error) {
 	}
 
 	// Try to set a "dummy" value, panic if redis is not accessible.
-	err = redis_con.Send("Set", "INIT", time.Now().UTC())
+	err = redis_con.Send("SET", "INIT", time.Now().UTC())
 
 	return
 }
