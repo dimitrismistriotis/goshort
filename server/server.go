@@ -11,7 +11,7 @@ import (
 func Serve(log *logging.Logger, port string) {
 	log.Debug(fmt.Sprintf("Starting server on port %s", port))
 
-	redis, err := redis_instance()
+	redis, err := redis_instance(log)
 
 	if err != nil {
 		log.Critical("Cannot access Redis server")
