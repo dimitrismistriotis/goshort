@@ -1,10 +1,10 @@
 package server
 
 import (
+	"os"
+
 	redis "github.com/garyburd/redigo/redis"
 	redisurl "github.com/soveran/redisurl"
-	"os"
-	"time"
 )
 
 // Gets redis instance from configuration parameters or environment's REDISTOGO_URL.
@@ -15,12 +15,12 @@ func redis_instance() (redis_con redis.Conn, err error) {
 		redis_con, err = redis.Dial("tcp", ":6379")
 	}
 
-	if err != nil {
-		return
-	}
+	// if err != nil {
+	//	return
+	// }
 
 	// Try to set a "dummy" value, panic if redis is not accessible.
-	err = redis_con.Send("SET", "INIT", time.Now().UTC())
+	// err = redis_con.Send("SET", "INIT", time.Now().UTC())
 
 	return
 }
